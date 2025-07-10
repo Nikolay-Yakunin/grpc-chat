@@ -1,0 +1,36 @@
+version: "3.8"
+
+services: 
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./cmd/auth-service/Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "50051:50051"
+    restart: unless-stopped
+    depends_on:
+      - auth-db
+    networks:
+      - grpc-chat-network
+
+  auth-db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: authdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - grpc-chat-network
+
+volumes:
+  db_data:
+
+networks:
+  grpc-chat-network:
+    

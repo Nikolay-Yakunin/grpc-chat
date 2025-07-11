@@ -21,3 +21,11 @@ auth_gen_migrate:
 auth_migrate:
 	docker run --rm -v $(shell pwd)/database/migrations:/migrations --network host migrate/migrate \
     -path=/migrations -database "postgres://user:password@localhost:5432/authdb?sslmode=disable" up
+
+auth_migrate_status:
+	docker run --rm -v $(shell pwd)/database/migrations:/migrations --network host migrate/migrate \
+		-path=/migrations -database "postgres://user:password@localhost:5432/authdb?sslmode=disable" version
+
+auth_migrate_force:
+	docker run --rm -v $(shell pwd)/database/migrations:/migrations --network host migrate/migrate \
+		-path=/migrations -database "postgres://user:password@localhost:5432/authdb?sslmode=disable" force 1

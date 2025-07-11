@@ -18,5 +18,5 @@ Tech what i want use:
 # Tasks
 
 - [ ] Clean Makefile
-- [ ] Fix Auth Migrations
+- [x] Fix Auth Migrations
 - [ ] Somthing else :)

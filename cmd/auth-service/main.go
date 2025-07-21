@@ -4,27 +4,26 @@ import (
     "database/sql"
     "log"
     "net"
-    "os"
 
     "google.golang.org/grpc"
     _ "github.com/lib/pq"
 
     "github.com/Nikolay-Yakunin/grpc-chat/internal/auth"
+    "github.com/Nikolay-Yakunin/grpc-chat/pkg/config"
 )
 
 
 func main() {
-    dbURL := os.Getenv("DATABASE_URL")
-    if dbURL == "" {
-        dbURL = "postgres://user:password@localhost/dbname?sslmode=disable"
+    env := config.NewENV()
+    if env.DATABASE_URL == "" {
+        env.DATABASE_URL = "postgres://user:password@localhost/dbname?sslmode=disable"
     }
 
-    port := os.Getenv("GRPC_PORT")
-    if port == "" {
-        port = "50051"
+    if env.GRPC_PORT == "" {
+        env.GRPC_PORT = "50051"
     }
 
-    db, err := sql.Open("postgres", dbURL)
+    db, err := sql.Open("postgres", env.DATABASE_URL)
     if err != nil {
         log.Fatal("Не удалось подключиться к базе данных:", err)
     }
@@ -38,7 +37,7 @@ func main() {
     service := auth.NewAuthService(repo)
     handler := auth.NewAuthHandler(service)
 
-    listener, err := net.Listen("tcp", ":"+port)
+    listener, err := net.Listen("tcp", ":"+env.GRPC_PORT)
     if err != nil {
         log.Fatal("Не удалось запустить слушатель:", err)
     }
@@ -46,7 +45,7 @@ func main() {
     grpcServer := grpc.NewServer()
     auth.RegisterAuthServiceServer(grpcServer, handler)
 
-    log.Println("gRPC сервер запущен на порту", port)
+    log.Println("gRPC сервер запущен на порту", env.GRPC_PORT)
     if err := grpcServer.Serve(listener); err != nil {
         log.Fatal("Ошибка запуска gRPC сервера:", err)
     }

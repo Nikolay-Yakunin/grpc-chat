@@ -16,7 +16,8 @@ import (
 func main() {
     env := config.NewENV()
     if env.DATABASE_URL == "" {
-        env.DATABASE_URL = "postgres://user:password@localhost/dbname?sslmode=disable"
+        env.DATABASE_URL = "postgres://user:password@auth_db:5432/authdb?sslmode=disable"
+
     }
 
     if env.GRPC_PORT == "" {

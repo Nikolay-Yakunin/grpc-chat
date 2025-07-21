@@ -8,7 +8,7 @@ RUN go mod download
 
 COPY internal/auth ./internal/auth
 COPY cmd/auth-service ./cmd/auth-service
-COPY pkg/token ./pkg/token
+COPY pkg ./pkg
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o auth-service ./cmd/auth-service/main.go
 

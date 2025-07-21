@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: ./cmd/auth-service/Dockerfile
     environment: # Change in production
-      - DATABASE_URL=postgres://user:password@authdb:5432/authdb
+      - DATABASE_URL=postgres://user:password@auth-db:5432/authdb?sslmode=disable
       - GRPC_PORT=50051
       - JWT_SECRET=6a9842f87acc69b6a4439be1f7585c23
     ports:
@@ -35,4 +35,3 @@ volumes:
 
 networks:
   grpc-chat-network:
-    
